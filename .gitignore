@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+
+# Environment
+.env
+config.yaml
+
+# IDE
+.idea/
+
+# Binaries
+/bin/
+/releases/
+
+# Go
+*.test
+*.out
+
+# Local
+tmp
+*.local.*

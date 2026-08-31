@@ -50,18 +50,21 @@ func main() {
 		Level: flags.logLevel,
 	})))
 
+	// Load config
 	cfg, err := config.Load(flags.configPath)
 	if err != nil {
 		slog.Error("Unable to load config", "err", err)
 		panic(err)
 	}
 
+	// Create jobs based on config
 	var jobs []runner.Job
 	for _, cj := range cfg.Jobs {
 		j := runner.NewJob(cj.ClaudeTaskID, cj.ClaudeTaskCronSchedule, func() { fmt.Println("test") })
 		jobs = append(jobs, j)
 	}
 
+	// Init job runner
 	r, err := runner.New(jobs)
 	if err != nil {
 		slog.Error("failed to create runner", "err", err)

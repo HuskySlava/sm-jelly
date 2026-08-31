@@ -6,9 +6,14 @@ import (
 	"os"
 )
 
-type Config struct {
+type Job struct {
+	ClaudeTaskID           string `yaml:"claude_task_id"`
 	ClaudeTaskCronSchedule string `yaml:"claude_tas_cron_schedule"`
 	ClaudeTaskHandlerName  string `yaml:"claude_task_handler_name"`
+}
+
+type Config struct {
+	Jobs []Job `yaml:"jobs"`
 }
 
 func Load(path string) (*Config, error) {
@@ -24,12 +29,18 @@ func Load(path string) (*Config, error) {
 	}
 
 	// Validate config
-	if cfg.ClaudeTaskCronSchedule == "" {
-		return nil, fmt.Errorf("missing config value: ClaudeTaskCronSchedule")
-	}
+	for i, j := range cfg.Jobs {
+		if j.ClaudeTaskID == "" {
+			return nil, fmt.Errorf("job #%d missing config value: claude_task_id", i)
+		}
 
-	if cfg.ClaudeTaskHandlerName == "" {
-		return nil, fmt.Errorf("missing config value: ClaudeTaskHandlerName")
+		if j.ClaudeTaskCronSchedule == "" {
+			return nil, fmt.Errorf("job #%d missing config value: claude_tas_cron_schedule", i)
+		}
+
+		if j.ClaudeTaskHandlerName == "" {
+			return nil, fmt.Errorf("job #%d, missing config value: claude_task_handler_name", i)
+		}
 	}
 
 	return cfg, nil

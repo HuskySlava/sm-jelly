@@ -1,2 +1,5 @@
-claude_tas_cron_schedule: "test"
-claude_task_handler_name: "test"
+jobs:
+  - claude_tas_cron_schedule: "* * * * *"
+    claude_task_handler_name: "test 1"
+  - claude_tas_cron_schedule: "* * * * *"
+    claude_task_handler_name: "test 2"

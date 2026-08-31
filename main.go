@@ -5,8 +5,11 @@ import (
 	"flag"
 	"fmt"
 	"github.com/HuskySlava/sm-jelly/internal/config"
+	"github.com/HuskySlava/sm-jelly/internal/runner"
 	"log/slog"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 type Flags struct {
@@ -37,6 +40,11 @@ func parseFlags() *Flags {
 }
 
 func main() {
+	// Gracefully shutdown on SIGTERM
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+
+	// Handle flags
 	flags := parseFlags()
 	slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
 		Level: flags.logLevel,
@@ -44,9 +52,31 @@ func main() {
 
 	cfg, err := config.Load(flags.configPath)
 	if err != nil {
-		slog.Error("Unable to load config:", "err", err)
+		slog.Error("Unable to load config", "err", err)
 		panic(err)
 	}
 
-	fmt.Println(cfg)
+	var jobs []runner.Job
+	for _, cj := range cfg.Jobs {
+		j := runner.NewJob(cj.ClaudeTaskID, cj.ClaudeTaskCronSchedule, func() { fmt.Println("test") })
+		jobs = append(jobs, j)
+	}
+
+	r, err := runner.New(jobs)
+	if err != nil {
+		slog.Error("failed to create runner", "err", err)
+		panic(err)
+	}
+	err = r.Run()
+	if err != nil {
+		slog.Error("failed to start runner", "err", err)
+		panic(err)
+	}
+
+	// Wait for SIGTERM
+	<-quit
+	err = r.Stop()
+	if err != nil {
+		slog.Error("failed to stop runner", "err", err)
+	}
 }

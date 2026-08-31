@@ -7,11 +7,11 @@ import (
 )
 
 type Config struct {
-	claudeTaskCronSchedule string `yaml:"claude_tas_cro_schedule"`
-	claudeTaskHandlerName  string `yaml:"claude_task_handler_name"`
+	ClaudeTaskCronSchedule string `yaml:"claude_tas_cron_schedule"`
+	ClaudeTaskHandlerName  string `yaml:"claude_task_handler_name"`
 }
 
-func LoadConfig(path string) (*Config, error) {
+func Load(path string) (*Config, error) {
 	res, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load config from: %s, :%w", path, err)
@@ -24,12 +24,12 @@ func LoadConfig(path string) (*Config, error) {
 	}
 
 	// Validate config
-	if cfg.claudeTaskCronSchedule == "" {
-		return nil, fmt.Errorf("missing config value: claudeTaskCronSchedule")
+	if cfg.ClaudeTaskCronSchedule == "" {
+		return nil, fmt.Errorf("missing config value: ClaudeTaskCronSchedule")
 	}
 
-	if cfg.claudeTaskCronSchedule == "" {
-		return nil, fmt.Errorf("missing config value: claudeTaskCronSchedule")
+	if cfg.ClaudeTaskHandlerName == "" {
+		return nil, fmt.Errorf("missing config value: ClaudeTaskHandlerName")
 	}
 
 	return cfg, nil

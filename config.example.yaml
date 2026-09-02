@@ -1,5 +1,6 @@
+claude_run_dir: "./tmp"
+claude_timeout_seconds: 60
 jobs:
-  - claude_tas_cron_schedule: "* * * * *"
-    claude_task_handler_name: "test 1"
-  - claude_tas_cron_schedule: "* * * * *"
-    claude_task_handler_name: "test 2"
+  - claude_task_cron_schedule: "* * * * *"
+    claude_task_handler_name: "test"
+    claude_task_id: "Test 1"

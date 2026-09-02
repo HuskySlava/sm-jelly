@@ -3,7 +3,6 @@ package main
 import (
 	"cmp"
 	"flag"
-	"fmt"
 	"github.com/HuskySlava/sm-jelly/internal/claude"
 	"github.com/HuskySlava/sm-jelly/internal/config"
 	"github.com/HuskySlava/sm-jelly/internal/runner"
@@ -45,18 +44,14 @@ func main() {
 
 	// Create prompt jobs based on config
 	var jobs []runner.Job
-	for i, cj := range cfg.Jobs {
+	for _, cj := range cfg.Jobs {
 		j := runner.NewJob(cj.ClaudeTaskID, cj.ClaudeTaskCronSchedule, func() {
 			r, err := c.Prompt("Edit index.html, improve it slightly add a bit of code - it should be small update that improves it")
 			if err != nil {
-				fmt.Println(err)
+				slog.Error("Unable to prompt Claude", "TaskID", cj.ClaudeTaskID, "err", err)
 				return
 			}
-			if err := os.WriteFile("./test.json", r, 0644); err != nil {
-				fmt.Println(err)
-				return
-			}
-			fmt.Printf("Test %d \n", i)
+			slog.Info("Task result", "TaskID", cj.ClaudeTaskID, "result", r)
 		})
 		jobs = append(jobs, j)
 	}

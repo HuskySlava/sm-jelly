@@ -3,7 +3,7 @@ services:
     build: .
     image: sm-jelly:latest
     platform: linux/amd64
+    env_file: .env
     volumes:
       - ./config.docker.yaml:/app/config.yaml:ro
       - ./workspace:/workspace
-      - env_file: .env

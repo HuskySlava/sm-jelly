@@ -1,5 +1,7 @@
 BINARY := sm-jelly
 
+.PHONY: build run fmt vet tidy check clean
+
 build:
 	go build -o bin/$(BINARY) .
 

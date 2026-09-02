@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
 	"os/exec"
 	"time"
 )
@@ -36,9 +35,6 @@ func (c *Claude) Prompt(prompt string) ([]byte, error) {
 		"acceptEdits")
 
 	cmd.Dir = c.Config.RunDir // Adjust
-
-	// TODO: Remove / fix before prod
-	cmd.Env = append(os.Environ(), "CLAUDE_CONFIG_DIR="+os.Getenv("HOME")+"/.claude-personal")
 
 	cmd.WaitDelay = 5 * time.Second
 

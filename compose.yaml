@@ -6,3 +6,4 @@ services:
     volumes:
       - ./config.docker.yaml:/app/config.yaml:ro
       - ./workspace:/workspace
+      - env_file: .env

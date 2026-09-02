@@ -2,14 +2,13 @@ package main
 
 import (
 	"cmp"
-	"context"
 	"flag"
 	"fmt"
+	"github.com/HuskySlava/sm-jelly/internal/claude"
 	"github.com/HuskySlava/sm-jelly/internal/config"
 	"github.com/HuskySlava/sm-jelly/internal/runner"
 	"log/slog"
 	"os"
-	"os/exec"
 	"os/signal"
 	"syscall"
 	"time"
@@ -38,16 +37,26 @@ func main() {
 		panic(err)
 	}
 
-	// Create jobs based on config
+	// Init claude
+	c := claude.New(&claude.Config{
+		RunDir:  cfg.ClaudeRunDir,
+		Timeout: time.Duration(cfg.ClaudeTimeoutSeconds) * time.Second,
+	})
+
+	// Create prompt jobs based on config
 	var jobs []runner.Job
-	for _, cj := range cfg.Jobs {
+	for i, cj := range cfg.Jobs {
 		j := runner.NewJob(cj.ClaudeTaskID, cj.ClaudeTaskCronSchedule, func() {
-			r, err := claudeCodeTest("hello")
+			r, err := c.Prompt("Edit index.html, improve it slightly add a bit of code - it should be small update that improves it")
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
-			fmt.Println(r)
+			if err := os.WriteFile("./test.json", r, 0644); err != nil {
+				fmt.Println(err)
+				return
+			}
+			fmt.Printf("Test %d \n", i)
 		})
 		jobs = append(jobs, j)
 	}
@@ -92,19 +101,4 @@ func parseFlags() *Flags {
 		configPath: configPath,
 		logLevel:   logLevel,
 	}
-}
-
-func claudeCodeTest(prompt string) (string, error) {
-	// TEST
-	ctx := context.Background()
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Minute)
-	defer cancel()
-	cmd := exec.CommandContext(
-		ctx, "claude",
-		"-p", prompt,
-		"--output-format", "json")
-	cmd.Dir = "" // Adjust
-	cmd.Env = append(os.Environ(), "CLAUDE_CONFIG_DIR="+os.Getenv("HOME")+"/.claude-personal")
-	out, err := cmd.Output()
-	return string(out), err
 }

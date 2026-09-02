@@ -1,0 +1,6 @@
+.git
+.idea
+bin
+tmp
+*.local.*
+config.yaml

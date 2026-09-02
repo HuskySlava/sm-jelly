@@ -1,0 +1,5 @@
+services:
+  sm-jelly:
+    build: .
+    image: sm-jelly:latest
+    platform: linux/amd64

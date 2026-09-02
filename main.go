@@ -46,7 +46,7 @@ func main() {
 	var jobs []runner.Job
 	for _, cj := range cfg.Jobs {
 		j := runner.NewJob(cj.ClaudeTaskID, cj.ClaudeTaskCronSchedule, func() {
-			r, err := c.Prompt("Edit index.html, improve it slightly add a bit of code - it should be small update that improves it")
+			r, err := c.Prompt(cj.ClaudeTaskPrompt)
 			if err != nil {
 				slog.Error("Unable to prompt Claude", "TaskID", cj.ClaudeTaskID, "err", err)
 				return

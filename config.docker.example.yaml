@@ -2,5 +2,5 @@ claude_run_dir: "/workspace"
 claude_timeout_seconds: 60
 jobs:
   - claude_task_cron_schedule: "* * * * *"
-    claude_task_handler_name: "test"
+    claude_task_prompt: "Edit index.html, improve it slightly add a bit of code - it should be small update that improves it, add a new comment at the end of the file with a small log of what you did + a timestamp"
     claude_task_id: "Test 1"

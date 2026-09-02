@@ -9,7 +9,7 @@ import (
 type Job struct {
 	ClaudeTaskID           string `yaml:"claude_task_id"`
 	ClaudeTaskCronSchedule string `yaml:"claude_task_cron_schedule"`
-	ClaudeTaskHandlerName  string `yaml:"claude_task_handler_name"`
+	ClaudeTaskPrompt       string `yaml:"claude_task_prompt"`
 }
 
 type Config struct {
@@ -44,8 +44,8 @@ func Load(path string) (*Config, error) {
 			return nil, fmt.Errorf("job #%d missing config value: claude_tas_cron_schedule", i)
 		}
 
-		if j.ClaudeTaskHandlerName == "" {
-			return nil, fmt.Errorf("job #%d, missing config value: claude_task_handler_name", i)
+		if j.ClaudeTaskPrompt == "" {
+			return nil, fmt.Errorf("job #%d, missing config value: claude_task_prompt", i)
 		}
 	}
 

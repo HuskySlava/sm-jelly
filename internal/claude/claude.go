@@ -52,7 +52,7 @@ func (c *Claude) Prompt(prompt string) ([]byte, error) {
 		}
 		var ee *exec.ExitError
 		if errors.As(err, &ee) {
-			return nil, fmt.Errorf("claude exited %d: %s", ee.ExitCode(), ee.Stderr)
+			return nil, fmt.Errorf("claude exited %d: stderr=%q stdout=%.300s", ee.ExitCode(), ee.Stderr, out)
 		}
 
 		return nil, fmt.Errorf("unable to get output from claude: %w", err)

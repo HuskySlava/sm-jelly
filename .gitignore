@@ -4,6 +4,7 @@
 # Environment
 .env
 config.yaml
+config.docker.yaml
 
 # IDE
 .idea/
@@ -18,4 +19,5 @@ config.yaml
 
 # Local
 tmp
+workspace/
 *.local.*

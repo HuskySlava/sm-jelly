@@ -1,6 +1,8 @@
-.git
-.idea
-bin
-tmp
-*.local.*
-config.yaml
+# Ignore all
+*
+
+# Except what the Go build needs
+!go.mod
+!go.sum
+!main.go
+!internal/

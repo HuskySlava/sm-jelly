@@ -8,7 +8,7 @@ import (
 
 type Job struct {
 	ClaudeTaskID           string `yaml:"claude_task_id"`
-	ClaudeTaskCronSchedule string `yaml:"claude_tas_cron_schedule"`
+	ClaudeTaskCronSchedule string `yaml:"claude_task_cron_schedule"`
 	ClaudeTaskHandlerName  string `yaml:"claude_task_handler_name"`
 }
 

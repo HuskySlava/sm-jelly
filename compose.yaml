@@ -3,3 +3,6 @@ services:
     build: .
     image: sm-jelly:latest
     platform: linux/amd64
+    volumes:
+      - ./config.docker.yaml:/app/config.yaml:ro
+      - ./workspace:/workspace

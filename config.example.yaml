@@ -1,6 +1,20 @@
-claude_run_dir: "./tmp"
+run_dir: "./tmp"
 claude_timeout_seconds: 60
-jobs:
-  - claude_task_cron_schedule: "* * * * *"
-    claude_task_prompt: "Edit index.html, improve it slightly add a bit of code - it should be small update that improves it, add a new comment at the end of the file with a small log of what you did + a timestamp"
-    claude_task_id: "Test 1"
+git_timeout_seconds: 60
+claude_jobs:
+  - cron_schedule: "1,16,46 * * * *"
+    prompt: "Edit index.html, improve it slightly add a bit of code - it should be small update that improves it, add a new comment at the end of the file with a small log of what you did + a timestamp"
+    job_id: "Claude 1"
+git_jobs:
+  - cron_schedule: "0,15,45 * * * *"
+    job_id: "Git 1"
+    git_command: "pull"
+  - cron_schedule: "3,17,47 * * * *"
+    job_id: "Git 2"
+    git_command: "commit"
+    git_scope: "."
+    git_message: "test commit"
+  - cron_schedule: "4,18,48 * * * *"
+    job_id: "Git 3"
+    git_command: "push"
+s

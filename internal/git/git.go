@@ -62,7 +62,12 @@ func (g *Git) Add(scopes ...string) error {
 	return err
 }
 
+var ErrNothingToCommit = errors.New("nothing to commit")
+
 func (g *Git) Commit(message string) error {
+	if _, err := g.run("diff", "--cached", "--quiet"); err == nil {
+		return ErrNothingToCommit
+	}
 	_, err := g.run("commit", "-m", message)
 	return err
 }

@@ -31,6 +31,8 @@ func main() {
 		Level: flags.logLevel,
 	})))
 
+	slog.Info("sm-jelly starting...")
+
 	// Load config
 	cfg, err := config.Load(flags.configPath)
 	if err != nil {
@@ -42,6 +44,7 @@ func main() {
 	c := claude.New(&claude.Config{
 		RunDir:  cfg.RunDir,
 		Timeout: time.Duration(cfg.ClaudeTimeoutSeconds) * time.Second,
+		Model:   cfg.ClaudeModel,
 	})
 
 	// Create prompt jobs based on config
@@ -98,11 +101,11 @@ func main() {
 		panic(err)
 	}
 	err = r.Run()
+	slog.Info("sm-jelly init complete")
 	if err != nil {
 		slog.Error("failed to start runner", "err", err)
 		panic(err)
 	}
-
 	// Wait for SIGTERM
 	<-quit
 	err = r.Stop()

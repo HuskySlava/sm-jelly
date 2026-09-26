@@ -1,9 +1,16 @@
 run_dir: "/workspace"
+claude_model: "sonnet"
 claude_timeout_seconds: 60
 git_timeout_seconds: 60
 claude_jobs:
   - cron_schedule: "1,16,46 * * * *"
-    prompt: "Edit index.html, improve it slightly add a bit of code - it should be small update that improves it, add a new comment at the end of the file with a small log of what you did + a timestamp"
+    prompt: "Read index.html and updates.log first.
+
+Make exactly ONE change to index.html: add a feature, improve visually, or fix a bug (fix real bugs first). Don't repeat earlier changes in updates.log. Keep it a single self-contained file, keep existing functionality working, and touch no other files.
+
+Finally, add one new line at the end of updates.log (never overwrite existing lines), in this format:
+<YYYY-MM-DD-HH:MM> (Claude): <one-sentence tl;dr, under 20 words>
+Use the real current time from the `date` command."
     job_id: "Claude 1"
 git_jobs:
   - cron_schedule: "0,15,45 * * * *"

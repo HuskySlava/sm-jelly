@@ -21,6 +21,7 @@ type GitJob struct {
 }
 
 type Config struct {
+	ClaudeModel          string      `yaml:"claude_model"`
 	ClaudeJobs           []ClaudeJob `yaml:"claude_jobs"`
 	GitJobs              []GitJob    `yaml:"git_jobs"`
 	RunDir               string      `yaml:"run_dir"`

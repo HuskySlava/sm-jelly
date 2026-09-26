@@ -11,6 +11,7 @@ import (
 type Config struct {
 	Timeout time.Duration
 	RunDir  string
+	Model   string
 }
 
 type Claude struct {
@@ -27,12 +28,16 @@ func (c *Claude) Prompt(prompt string) ([]byte, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.Config.Timeout)
 	defer cancel()
 
-	cmd := exec.CommandContext(
-		ctx, "claude",
+	args := []string{
 		"-p", prompt,
 		"--output-format", "json",
-		"--permission-mode",
-		"acceptEdits")
+		"--permission-mode", "acceptEdits",
+	}
+	if c.Config.Model != "" {
+		args = append(args, "--model", c.Config.Model)
+	}
+
+	cmd := exec.CommandContext(ctx, "claude", args...)
 
 	cmd.Dir = c.Config.RunDir // Adjust
 
@@ -48,7 +53,7 @@ func (c *Claude) Prompt(prompt string) ([]byte, error) {
 		}
 		var ee *exec.ExitError
 		if errors.As(err, &ee) {
-			return nil, fmt.Errorf("claude exited %d: stderr=%q stdout=%.300s", ee.ExitCode(), ee.Stderr, out)
+			return nil, fmt.Errorf("claude exited %d: stderr=%q stdout=%.900s", ee.ExitCode(), ee.Stderr, out)
 		}
 
 		return nil, fmt.Errorf("unable to get output from claude: %w", err)

@@ -4,6 +4,9 @@ services:
     image: sm-jelly:latest
     platform: linux/amd64
     env_file: .env
+    environment:
+      - GIT_SSH_COMMAND=ssh -i /root/.ssh/deploy_key -o Hostname=github.com -o StrictHostKeyChecking=accept-new
     volumes:
       - ./config.docker.yaml:/app/config.yaml:ro
-      - ./workspace:/workspace
+      - ${WORKSPACE_DIR}:/workspace
+      - ${DEPLOY_KEY}:/root/.ssh/deploy_key:ro

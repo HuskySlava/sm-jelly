@@ -51,6 +51,7 @@ func main() {
 	var jobs []runner.Job
 	for _, cj := range cfg.ClaudeJobs {
 		j := runner.NewJob(cj.JobID, cj.CronSchedule, func() {
+			slog.Info("running Claude job", "JobID", cj.JobID)
 			r, err := c.Prompt(cj.JobPrompt)
 			if err != nil {
 				slog.Error("Unable to prompt Claude", "JobID", cj.JobID, "err", err)
@@ -68,6 +69,7 @@ func main() {
 
 	for _, gj := range cfg.GitJobs {
 		j := runner.NewJob(gj.JobID, gj.CronSchedule, func() {
+			slog.Info("running GIT job", "JobID", gj.JobID)
 			switch gj.Command {
 			case "pull":
 				if err := g.Pull(); err != nil {

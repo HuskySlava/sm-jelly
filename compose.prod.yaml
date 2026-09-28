@@ -1,0 +1,19 @@
+services:
+  sm-jelly:
+    image: sm-jelly:latest
+    platform: linux/amd64
+    env_file: .env
+    environment:
+      - GIT_SSH_COMMAND=ssh -i /root/.ssh/deploy_key -o IdentitiesOnly=yes -o Hostname=github.com -oStrictHostKeyChecking=accept-new
+      - GIT_CONFIG_COUNT=1
+      - GIT_CONFIG_KEY_0=safe.directory
+      - GIT_CONFIG_VALUE_0=/workspace
+    volumes:
+      - ./config.docker.yaml:/app/config.yaml:ro
+      - ${WORKSPACE_DIR}:/workspace
+      - ${DEPLOY_KEY}:/root/.ssh/deploy_key:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

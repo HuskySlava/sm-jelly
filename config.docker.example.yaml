@@ -1,26 +1,27 @@
 run_dir: "/workspace"
 claude_model: "sonnet"
-claude_timeout_seconds: 240
+claude_timeout_seconds: 300
 git_timeout_seconds: 60
 claude_jobs:
-  - cron_schedule: "1/15 * * * *"
-    prompt: "Read index.html and updates.log first.
+  - cron_schedule: "1/30 * * * *"
+    prompt: "Read index.html first, don't read updates.log.
 
-    Make exactly ONE change to index.html: add a feature, improve visually, or fix a bug (fix real bugs first). Don't repeat earlier changes in updates.log. Keep it a single self-contained file, keep existing functionality working, and touch no other files.
-    
+    Make exactly ONE change to index.html: add a feature (Be creative!), improve visually, or fix a bug (fix real bugs first). Keep it a single self-contained file, and touch no other files.
+
     Finally, add one new line at the end of updates.log (never overwrite existing lines), in this format:
     <YYYY-MM-DD-HH:MM> (Claude): <one-sentence tl;dr, under 20 words>
     Use the real current time from the `date` command."
-    job_id: "Claude 1"
+    job_id: "Claude 1: prompt"
 git_jobs:
-  - cron_schedule: "0/15 * * * *"
-    job_id: "Git 1"
+  - cron_schedule: "0/30 * * * *"
+    job_id: "Git 1: pull"
     git_command: "pull"
-  - cron_schedule: "6/15 * * * *"
-    job_id: "Git 2"
+  - cron_schedule: "7/30 * * * *"
+    job_id: "Git 2: commit"
     git_command: "commit"
     git_scope: "."
-    git_message: "test commit"
-  - cron_schedule: "7/15 * * * *"
-    job_id: "Git 3"
+    git_message: "update by claude"
+  - cron_schedule: "8/30 * * * *"
+    job_id: "Git 3: push"
     git_command: "push"
+
